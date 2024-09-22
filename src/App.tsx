@@ -2,9 +2,26 @@ import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import {gql, useQuery} from "@apollo/client";
+
+const GET_CHARACTERS = gql`
+  query getCharacters {
+    characters(page: 1) {
+      info {
+        count
+      }
+      results {
+        name
+      }
+    }
+  }
+`
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const {data} = useQuery(GET_CHARACTERS)
+  console.log(data)
 
   return (
     <>
