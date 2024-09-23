@@ -1,52 +1,17 @@
-import {useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import {gql, useQuery} from "@apollo/client";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SearchComponent from './components/SearchComponent';
+import ResultPage from './pages/results';
+import MyApolloProvider from "./graphql/MyApolloProvider.tsx";
 
-const GET_CHARACTERS = gql`
-  query getCharacters {
-    characters(page: 1) {
-      info {
-        count
-      }
-      results {
-        name
-      }
-    }
-  }
-`
-
-function App() {
-  const [count, setCount] = useState(0)
-
-  const {data} = useQuery(GET_CHARACTERS)
-  console.log(data)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo"/>
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo"/>
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export default function App() {
+    return (
+        <MyApolloProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<SearchComponent />} />
+                    <Route path="/result/:id" element={<ResultPage />} />
+                </Routes>
+            </Router>
+        </MyApolloProvider>
+    );
 }
-
-export default App
