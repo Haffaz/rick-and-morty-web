@@ -1,9 +1,9 @@
-import SearchComponent from '../components/SearchComponent';
+import SearchComponent from "../components/SearchComponent";
 
 export default function Home() {
-    return (
-        <div>
-            <SearchComponent />
-        </div>
-    );
+  return (
+    <div>
+      <SearchComponent />
+    </div>
+  );
 }

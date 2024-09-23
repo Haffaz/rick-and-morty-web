@@ -1,48 +1,48 @@
-import {gql, useLazyQuery} from '@apollo/client';
+import { gql, useLazyQuery } from "@apollo/client";
 
 export type Origin = {
-    name: string;
-}
+  name: string;
+};
 
 export type Location = {
-    name: string;
-}
+  name: string;
+};
 
 export type Character = {
-    id: string;
-    name: string;
-    status: string;
-    species: string;
-    type: string;
-    gender: string;
-    origin: Origin;
-    location: Location;
-    image: string;
-}
+  id: string;
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  origin: Origin;
+  location: Location;
+  image: string;
+};
 
 export type Info = {
-    count: number;
-}
+  count: number;
+};
 
 export type CharactersData = {
-    characters: {
-        info: Info;
-        results: Character[];
-    };
-}
+  characters: {
+    info: Info;
+    results: Character[];
+  };
+};
 
 export type FilterCharacter = {
-    name: string;
-    status: string;
-    species: string;
-    type: string;
-    gender: string;
-}
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+};
 
 export type UseCharactersQueryParams = {
-    page: number;
-    filter: Partial<FilterCharacter>
-}
+  page: number;
+  filter: Partial<FilterCharacter>;
+};
 
 export const GET_CHARACTERS_QUERY = gql`
     query getCharacters($page: Int!, $filter: FilterCharacter) {
@@ -67,14 +67,17 @@ export const GET_CHARACTERS_QUERY = gql`
             }
         }
     }
-`
+`;
 
-export const useCharactersQuery = ({page, filter}: UseCharactersQueryParams) => {
-    const [executeSearch, {
-        loading,
-        data
-    }] = useLazyQuery<CharactersData, UseCharactersQueryParams>(GET_CHARACTERS_QUERY, {
-        variables: {page, filter}
-    });
-    return {executeSearch, loading, data};
-}
+export const useCharactersQuery = ({
+  page,
+  filter,
+}: UseCharactersQueryParams) => {
+  const [executeSearch, { loading, data }] = useLazyQuery<
+    CharactersData,
+    UseCharactersQueryParams
+  >(GET_CHARACTERS_QUERY, {
+    variables: { page, filter },
+  });
+  return { executeSearch, loading, data };
+};
