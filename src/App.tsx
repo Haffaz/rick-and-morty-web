@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import SearchComponent from "./components/SearchComponent";
-import ResultPage from "./pages/results";
 import MyApolloProvider from "./graphql/MyApolloProvider.tsx";
+import ResultPage from "./pages/results";
 
 export default function App() {
   return (

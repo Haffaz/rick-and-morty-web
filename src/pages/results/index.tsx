@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
 
 const GET_CHARACTER = gql`
     query GetCharacter($id: ID!) {
@@ -30,7 +30,7 @@ export default function ResultPage() {
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500" />
       </div>
     );
   if (error)

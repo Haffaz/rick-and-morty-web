@@ -1,10 +1,10 @@
 import {
   ApolloClient,
   ApolloProvider,
-  createHttpLink,
   InMemoryCache,
+  createHttpLink,
 } from "@apollo/client";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const httpLink = createHttpLink({
   uri: "https://rickandmortyapi.com/graphql",
