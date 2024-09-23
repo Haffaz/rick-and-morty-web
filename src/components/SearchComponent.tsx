@@ -3,41 +3,66 @@ import {Link} from 'react-router-dom';
 import {useCharactersQuery} from '../graphql/useCharactersQuery';
 
 export default function SearchComponent() {
-    const [query, setQuery] = useState('');
-    const {executeSearch, loading, data} = useCharactersQuery({page: 1, filter: {name: query}});
+    const [filter, setFilter] = useState('');
+    const {executeSearch, loading, data} = useCharactersQuery({page: 1, filter: {name: filter}});
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            if (query.trim() !== '') {
+            if (filter.trim() !== '') {
                 executeSearch();
             }
         }, 300)
 
         return () => clearTimeout(delayDebounceFn)
-    }, [query, executeSearch]);
+    }, [filter, executeSearch]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(e.target.value);
+        setFilter(e.target.value);
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <input
-                type="text"
-                value={query}
-                onChange={handleInputChange}
-                placeholder="Start typing to search..."
-                className="w-full p-2 text-lg border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {loading && <p>Loading...</p>}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {data?.results.map((result) => (
-                    <Link to={`/result/${result.id}`} key={result.id}>
-                        <div className="bg-gray-100 p-4 rounded-md cursor-pointer">
-                            {result.name}
-                        </div>
-                    </Link>
-                ))}
+        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Character Search</h1>
+                    <p className="text-xl text-gray-600">Find your favorite Rick and Morty characters</p>
+                </div>
+                <div className="mb-8">
+                    <input
+                        type="text"
+                        value={filter}
+                        onChange={handleInputChange}
+                        placeholder="Start typing to search..."
+                        className="w-full p-4 text-lg border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                {loading && (
+                    <div className="flex justify-center items-center py-8">
+                        <div
+                            className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    </div>
+                )}
+                <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                    {data?.characters.results.map((result) => (
+                        <Link to={`/result/${result.id}`} key={result.id}
+                              className="block hover:bg-gray-50 transition duration-150 ease-in-out">
+                            <div className="px-6 py-4 flex items-center">
+                                <div className="flex-shrink-0 h-12 w-12">
+                                    <img className="h-12 w-12 rounded-full" src={result.image} alt={result.name}/>
+                                </div>
+                                <div className="ml-4">
+                                    <div className="text-lg font-medium text-gray-900">{result.name}</div>
+                                    <div className="text-sm text-gray-500">{result.species}</div>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+                {data?.characters.results.length === 0 && filter && (
+                    <div className="text-center py-8 text-gray-600">
+                        No results found for "{filter}"
+                    </div>
+                )}
             </div>
         </div>
     );

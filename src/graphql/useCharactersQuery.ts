@@ -25,13 +25,23 @@ export type Info = {
 }
 
 export type CharactersData = {
-    info: Info;
-    results: Character[];
+    characters: {
+        info: Info;
+        results: Character[];
+    };
+}
+
+export type FilterCharacter = {
+    name: string;
+    status: string;
+    species: string;
+    type: string;
+    gender: string;
 }
 
 export type UseCharactersQueryParams = {
     page: number;
-    filter: { name: string }
+    filter: Partial<FilterCharacter>
 }
 
 export const GET_CHARACTERS_QUERY = gql`
