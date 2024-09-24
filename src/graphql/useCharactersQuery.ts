@@ -82,6 +82,7 @@ export const useCharactersQuery = (params?: UseCharactersQueryParams) => {
   });
 
   const characters = data?.characters.results || [];
+  const info = data?.characters.info;
 
-  return { executeSearch, loading, characters };
+  return { executeSearch, loading, characters, info };
 };
