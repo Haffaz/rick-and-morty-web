@@ -60,18 +60,18 @@ export default function Home() {
             Find your favorite Rick and Morty characters
           </p>
         </div>
-        <div className="relative mb-4 mx-auto flex w-1/2 flex-wrap items-stretch">
+        <div className="relative mb-4 mx-auto flex w-full sm:w-1/2 flex-wrap items-stretch">
           <input
             ref={inputRef}
             value={filter}
             onChange={handleInputChange}
             placeholder="Start typing to search..."
-            className="relative m-0 block flex-auto rounded border border-solid border-gray-700 bg-gray-800 bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-gray-200 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-blue-500 focus:text-gray-200 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
+            className="relative m-0 block flex-auto rounded-l border border-solid border-gray-700 bg-gray-800 bg-clip-padding px-3 py-2 text-base font-normal leading-6 text-gray-200 outline-none transition duration-200 ease-in-out focus:z-10 focus:border-blue-500 focus:text-gray-200 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
             aria-label="Search"
             aria-describedby="button-addon2"
           />
           <span
-            className="input-group-text flex items-center whitespace-nowrap rounded px-3 py-1.5 text-center text-base font-normal text-gray-200"
+            className="input-group-text flex items-center whitespace-nowrap rounded-r px-3 py-2 text-center text-base font-normal text-gray-200 bg-gray-700"
             id="basic-addon2"
           >
             <svg
@@ -88,23 +88,24 @@ export default function Home() {
               />
             </svg>
           </span>
+        </div>
+        <div className="text-center">
           <button
             type="button"
             onClick={handleReset}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200 ease-in-out"
           >
             Reset
           </button>
         </div>
       </div>
-
       {loading && (
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
         </div>
       )}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {data?.characters.results.slice(0, 20).map((result) => (
+        {data?.characters.results.map((result) => (
           <button
             type="button"
             key={result.id}
