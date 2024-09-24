@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import { TbRefreshDot } from "react-icons/tb";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Pagination from "../components/Pagination.tsx";
 import Search from "../components/Search.tsx";
 import { useCharactersQuery } from "../graphql/useCharactersQuery.ts";
@@ -115,6 +115,12 @@ export default function Home() {
                 </div>
                 <div className="text-sm text-gray-600">{character.species}</div>
               </div>
+              <Link
+                to={`/c/${character.id}`}
+                className="mt-2 text-blue-600 hover:underline"
+              >
+                View Details
+              </Link>
             </div>
           </button>
         ))}

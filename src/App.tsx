@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import MyApolloProvider from "./graphql/MyApolloProvider.tsx";
 import Home from "./pages";
-import ResultPage from "./pages/results";
+import CharacterPage from "./pages/character";
 
 export default function App() {
   return (
@@ -9,7 +9,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/result/:id" element={<ResultPage />} />
+          <Route path="/c/:id" element={<CharacterPage />} />
         </Routes>
       </Router>
     </MyApolloProvider>

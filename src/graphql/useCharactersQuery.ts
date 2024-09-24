@@ -1,24 +1,5 @@
 import { gql, useLazyQuery } from "@apollo/client";
-
-type Origin = {
-  name: string;
-};
-
-type Location = {
-  name: string;
-};
-
-type Character = {
-  id: string;
-  name: string;
-  status: string;
-  species: string;
-  type: string;
-  gender: string;
-  origin: Origin;
-  location: Location;
-  image: string;
-};
+import type { Character } from "./types.ts";
 
 type Info = {
   count: number;
