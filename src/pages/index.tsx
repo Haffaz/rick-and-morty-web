@@ -1,19 +1,14 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
-import {
-  TbChevronLeft,
-  TbChevronRight,
-  TbRefreshDot,
-  TbSearch,
-} from "react-icons/tb";
+import { useEffect, useState } from "react";
+import { TbRefreshDot } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../components/Pagination.tsx";
+import Search from "../components/Search.tsx";
 import { useCharactersQuery } from "../graphql/useCharactersQuery.ts";
 
 export default function Home() {
   const [transparentIds, setTransparentIds] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const filterParam = searchParams.get("filter") || "";
@@ -22,12 +17,6 @@ export default function Home() {
     page: currentPage,
     filter: { name: filterParam },
   });
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -83,18 +72,8 @@ export default function Home() {
             Find your favorite Rick and Morty characters
           </p>
         </div>
-        <div className="relative mb-4 max-w-md mx-auto flex w-full flex-wrap items-stretch">
-          <input
-            ref={inputRef}
-            value={filterParam}
-            onChange={handleInputChange}
-            placeholder="Start typing to search..."
-            className="relative m-0 block flex-auto rounded-l border border-solid border-gray-300 bg-gray-100 bg-clip-padding px-3 py-2 text-base font-normal leading-6 text-gray-900 outline-none transition duration-200 ease-in-out focus:z-10 focus:border-blue-400 focus:text-gray-900 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
-            aria-label="Search"
-          />
-          <span className="input-group-text flex items-center whitespace-nowrap rounded-r px-3 py-2 text-center text-base font-normal text-gray-600 bg-gray-200">
-            <TbSearch className="h-5 w-5" />
-          </span>
+        <div className="mb-4 max-w-md mx-auto">
+          <Search value={filterParam} handleOnChange={handleInputChange} />
         </div>
         <div className="flex justify-center mt-2 mb-8">
           <button
@@ -108,7 +87,7 @@ export default function Home() {
         </div>
       </div>
       {loading && (
-        <div className="flex justify-center items-center py-8">
+        <div className="flex justify-center items-center py-16">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
         </div>
       )}
@@ -146,33 +125,11 @@ export default function Home() {
         </div>
       )}
       {characters.length > 0 && (
-        <div className="flex justify-center items-center py-8 space-x-4">
-          <button
-            type="button"
-            onClick={() => handlePageChange(currentPage - 1)}
-            className={`px-4 py-2 cursor-pointer text-blue-600 rounded-lg hover:text-blue-700 transition duration-200 ease-in-out bg-transparent ${
-              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            <TbChevronLeft className="inline-block h-5 w-5" />
-            Previous
-          </button>
-          <span className="text-lg text-gray-700">
-            Page {currentPage} of {info ? Math.ceil(info.count / 20) : 1}
-          </span>
-          <button
-            type="button"
-            onClick={() => handlePageChange(currentPage + 1)}
-            className={`px-4 py-2 cursor-pointer text-blue-600 rounded-lg hover:text-blue-700 transition duration-200 ease-in-out bg-transparent ${
-              info && currentPage >= Math.ceil(info.count / 20)
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-          >
-            Next
-            <TbChevronRight className="inline-block h-5 w-5" />
-          </button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          resultsCount={info?.count}
+        />
       )}
     </div>
   );
