@@ -1,14 +1,14 @@
 import { gql, useLazyQuery } from "@apollo/client";
 
-export type Origin = {
+type Origin = {
   name: string;
 };
 
-export type Location = {
+type Location = {
   name: string;
 };
 
-export type Character = {
+type Character = {
   id: string;
   name: string;
   status: string;
@@ -20,11 +20,11 @@ export type Character = {
   image: string;
 };
 
-export type Info = {
+type Info = {
   count: number;
 };
 
-export type CharactersQueryData = {
+type CharactersQueryData = {
   characters: {
     info: Info;
     results: Character[];
@@ -36,7 +36,7 @@ type CharactersQueryVariables = {
   filter?: Partial<FilterCharacter>;
 };
 
-export type FilterCharacter = {
+type FilterCharacter = {
   name: string;
   status: string;
   species: string;
