@@ -1,16 +1,17 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useCharactersQuery } from "../graphql/useCharactersQuery.ts";
 
 export default function Home() {
-  const [filter, setFilter] = useState("");
   const [transparentIds, setTransparentIds] = useState<Set<string>>(new Set());
+
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { executeSearch, loading, data } = useCharactersQuery({
-    page: 1,
-    filter: { name: filter },
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterParam = searchParams.get("filter") || "";
+
+  const { executeSearch, loading, characters } = useCharactersQuery();
 
   useEffect(() => {
     if (inputRef.current) {
@@ -20,16 +21,23 @@ export default function Home() {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (filter.trim() !== "") {
-        executeSearch();
+      if (filterParam.trim()) {
+        executeSearch({
+          variables: { page: 1, filter: { name: filterParam } },
+        });
       }
     }, 300);
-
     return () => clearTimeout(delayDebounceFn);
-  }, [filter, executeSearch]);
+  }, [filterParam, executeSearch]);
+
+  const setFilterQueryParam = (value: string) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set("filter", value);
+    setSearchParams(updatedParams);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
+    setFilterQueryParam(e.target.value);
   };
 
   const handleResultClick = (id: string) => {
@@ -45,8 +53,9 @@ export default function Home() {
   };
 
   const handleReset = () => {
-    setFilter("");
     setTransparentIds(new Set());
+    setSearchParams(undefined);
+    executeSearch();
   };
 
   return (
@@ -63,7 +72,7 @@ export default function Home() {
         <div className="relative mb-4 mx-auto flex w-full sm:w-1/2 flex-wrap items-stretch">
           <input
             ref={inputRef}
-            value={filter}
+            value={filterParam}
             onChange={handleInputChange}
             placeholder="Start typing to search..."
             className="relative m-0 block flex-auto rounded-l border border-solid border-gray-700 bg-gray-800 bg-clip-padding px-3 py-2 text-base font-normal leading-6 text-gray-200 outline-none transition duration-200 ease-in-out focus:z-10 focus:border-blue-500 focus:text-gray-200 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
@@ -105,7 +114,7 @@ export default function Home() {
         </div>
       )}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {data?.characters.results.map((result) => (
+        {characters.map((result) => (
           <button
             type="button"
             key={result.id}
@@ -132,9 +141,9 @@ export default function Home() {
           </button>
         ))}
       </div>
-      {data?.characters.results.length === 0 && filter && (
+      {characters.length === 0 && !loading && filterParam && (
         <div className="text-center py-8 text-gray-400">
-          No results found for "{filter}"
+          No results found for "{filterParam}"
         </div>
       )}
     </div>

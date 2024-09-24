@@ -24,11 +24,16 @@ export type Info = {
   count: number;
 };
 
-export type CharactersData = {
+export type CharactersQueryData = {
   characters: {
     info: Info;
     results: Character[];
   };
+};
+
+type CharactersQueryVariables = {
+  page?: number;
+  filter?: Partial<FilterCharacter>;
 };
 
 export type FilterCharacter = {
@@ -39,45 +44,44 @@ export type FilterCharacter = {
   gender: string;
 };
 
-export type UseCharactersQueryParams = {
-  page: number;
-  filter: Partial<FilterCharacter>;
-};
+export type UseCharactersQueryParams = CharactersQueryVariables;
 
 export const GET_CHARACTERS_QUERY = gql`
-    query getCharacters($page: Int!, $filter: FilterCharacter) {
-        characters(page: $page, filter: $filter) {
-            info {
-                count
-            }
-            results {
-                id
-                name
-                status
-                species
-                type
-                gender
-                origin {
-                    name
-                }
-                location {
-                    name
-                }
-                image
-            }
+  query getCharacters($page: Int!, $filter: FilterCharacter) {
+    characters(page: $page, filter: $filter) {
+      info {
+        count
+      }
+      results {
+        id
+        name
+        status
+        species
+        type
+        gender
+        origin {
+          name
         }
+        location {
+          name
+        }
+        image
+      }
     }
+  }
 `;
 
-export const useCharactersQuery = ({
-  page,
-  filter,
-}: UseCharactersQueryParams) => {
+export const useCharactersQuery = (params?: UseCharactersQueryParams) => {
+  const { page = 1, filter } = params || {};
+
   const [executeSearch, { loading, data }] = useLazyQuery<
-    CharactersData,
-    UseCharactersQueryParams
+    CharactersQueryData,
+    CharactersQueryVariables
   >(GET_CHARACTERS_QUERY, {
     variables: { page, filter },
   });
-  return { executeSearch, loading, data };
+
+  const characters = data?.characters.results || [];
+
+  return { executeSearch, loading, characters };
 };
