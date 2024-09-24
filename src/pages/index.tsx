@@ -1,5 +1,11 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import {
+  TbChevronLeft,
+  TbChevronRight,
+  TbRefreshDot,
+  TbSearch,
+} from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
 import { useCharactersQuery } from "../graphql/useCharactersQuery.ts";
 
@@ -68,7 +74,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="mb-3 xl:w-96 mx-auto">
+      <div className="mb-3 mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
             Character Search
@@ -77,7 +83,7 @@ export default function Home() {
             Find your favorite Rick and Morty characters
           </p>
         </div>
-        <div className="relative mb-4 mx-auto flex w-full sm:w-1/2 flex-wrap items-stretch">
+        <div className="relative mb-4 max-w-md mx-auto flex w-full flex-wrap items-stretch">
           <input
             ref={inputRef}
             value={filterParam}
@@ -85,33 +91,18 @@ export default function Home() {
             placeholder="Start typing to search..."
             className="relative m-0 block flex-auto rounded-l border border-solid border-gray-300 bg-gray-100 bg-clip-padding px-3 py-2 text-base font-normal leading-6 text-gray-900 outline-none transition duration-200 ease-in-out focus:z-10 focus:border-blue-400 focus:text-gray-900 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
             aria-label="Search"
-            aria-describedby="button-addon2"
           />
-          <span
-            className="input-group-text flex items-center whitespace-nowrap rounded-r px-3 py-2 text-center text-base font-normal text-gray-600 bg-gray-200"
-            id="basic-addon2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="h-5 w-5"
-            >
-              <title>Search</title>
-              <path
-                fillRule="evenodd"
-                d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                clipRule="evenodd"
-              />
-            </svg>
+          <span className="input-group-text flex items-center whitespace-nowrap rounded-r px-3 py-2 text-center text-base font-normal text-gray-600 bg-gray-200">
+            <TbSearch className="h-5 w-5" />
           </span>
         </div>
-        <div className="text-center">
+        <div className="flex justify-center mt-2 mb-8">
           <button
             type="button"
             onClick={handleReset}
-            className="mt-2 mb-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200 ease-in-out"
+            className="flex items-center gap-2 px-2 py-2 cursor-pointer border-gray-600 border-2 text-gray-700 rounded-lg hover:border-gray-500 hover:text-gray-500"
           >
+            <TbRefreshDot className="h-5 w-5 inline-block" />
             Reset
           </button>
         </div>
@@ -159,9 +150,11 @@ export default function Home() {
           <button
             type="button"
             onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200 ease-in-out disabled:opacity-50"
+            className={`px-4 py-2 cursor-pointer text-blue-600 rounded-lg hover:text-blue-700 transition duration-200 ease-in-out bg-transparent ${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
+            <TbChevronLeft className="inline-block h-5 w-5" />
             Previous
           </button>
           <span className="text-lg text-gray-700">
@@ -170,10 +163,14 @@ export default function Home() {
           <button
             type="button"
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={info && currentPage >= Math.ceil(info.count / 20)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition duration-200 ease-in-out disabled:opacity-50"
+            className={`px-4 py-2 cursor-pointer text-blue-600 rounded-lg hover:text-blue-700 transition duration-200 ease-in-out bg-transparent ${
+              info && currentPage >= Math.ceil(info.count / 20)
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
           >
             Next
+            <TbChevronRight className="inline-block h-5 w-5" />
           </button>
         </div>
       )}
